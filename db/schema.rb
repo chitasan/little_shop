@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190413204120) do
+ActiveRecord::Schema.define(version: 20190414015456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,8 +18,10 @@ ActiveRecord::Schema.define(version: 20190413204120) do
   create_table "discounts", force: :cascade do |t|
     t.integer "amount_off", default: 0
     t.integer "required_min_price", default: 0
-    t.bigint "order_items_id"
-    t.index ["order_items_id"], name: "index_discounts_on_order_items_id"
+    t.bigint "item_id"
+    t.bigint "merchant_id"
+    t.index ["item_id"], name: "index_discounts_on_item_id"
+    t.index ["merchant_id"], name: "index_discounts_on_merchant_id"
   end
 
   create_table "items", force: :cascade do |t|
@@ -72,7 +74,8 @@ ActiveRecord::Schema.define(version: 20190413204120) do
     t.index ["state"], name: "index_users_on_state"
   end
 
-  add_foreign_key "discounts", "order_items", column: "order_items_id"
+  add_foreign_key "discounts", "items"
+  add_foreign_key "discounts", "users", column: "merchant_id"
   add_foreign_key "items", "users", column: "merchant_id"
   add_foreign_key "order_items", "items"
   add_foreign_key "order_items", "orders"

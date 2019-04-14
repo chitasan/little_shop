@@ -1,5 +1,7 @@
 class Item < ApplicationRecord
   belongs_to :user, foreign_key: 'merchant_id'
+  has_one :discount
+
   has_many :order_items, dependent: :destroy
   has_many :orders, through: :order_items
 
