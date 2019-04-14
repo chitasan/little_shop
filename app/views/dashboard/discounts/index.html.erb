@@ -1,0 +1,9 @@
+<h1>Active Items Available for Bulk Discount</h1>
+<br>
+<% @items.each do |item| %>
+  <section id='discounts-<%= item.id %>'>
+    <%= link_to item.name, item_path(item) %>
+    <%= button_to 'Enable Discount', dashboard_discount_path(item), method: :patch %>
+    <br>
+  </section>
+<% end %>
