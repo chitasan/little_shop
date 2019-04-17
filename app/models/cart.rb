@@ -41,6 +41,22 @@ class Cart
   end
 
   def subtotal(item)
-    count_of(item.id) * item.price
+    original_subtotal = count_of(item.id) * item.price
+    merchant = item.user
+    discounts = merchant.discounts_by_type(merchant.discount_type)
+    if merchant.discount_type == 0
+      applicable_discount = discounts.find do |discount|
+        discount.quantity.include?(count_of(item.id))
+      end 
+      percent_off = ((100 - applicable_discount.amount_off.to_f)/100)
+      ((original_subtotal) * percent_off) if applicable discount 
+    elsif merchant.discount_type == 1
+      applicable_discount = discounts.find do |discount|
+        discount.item_total > count_of(item.id)
+      end
+      (original_subtotal - applicable_discount.amount_off) if applicable_discount
+    elsif merchant.discount_type == 2
+      original_subtotal
+    end 
   end
 end

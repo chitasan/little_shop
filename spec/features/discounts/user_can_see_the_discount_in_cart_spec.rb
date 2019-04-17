@@ -21,7 +21,6 @@ RSpec.describe 'As a user' do
     click_button "Add to Cart"
 
     visit cart_path
-    save_and_open_page
     
     expect(page).to have_content("Total: $95.00")
   end 
