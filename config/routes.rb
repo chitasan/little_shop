@@ -35,6 +35,12 @@ Rails.application.routes.draw do
     patch '/items/:id/disable', to: 'items#disable', as: 'disable_item'
     put '/order_items/:order_item_id/fulfill', to: 'orders#fulfill', as: 'fulfill_order_item'
     resources :orders, only: [:show]
+
+    #Discounts Path
+    resources :discounts, only: [:index, :new, :create, :edit, :update, :destroy]
+    
+    post '/discounts/toggle_discount', to: "discounts#toggle_discount", as: 'toggle_discount'
+    get "/discounts/set-type", to: "discounts#set_type", as: 'set_type'
   end
 
   namespace :admin do

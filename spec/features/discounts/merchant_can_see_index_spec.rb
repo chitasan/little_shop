@@ -36,7 +36,7 @@ RSpec.describe 'Discounts Index Page' do
         expect(page).to_not have_content("15")
       end 
 
-      expect(page).to have_button "click here"
+      expect(page).to have_button "Switch"
       expect(page).to have_link "Add Discount"
     end 
   end 
