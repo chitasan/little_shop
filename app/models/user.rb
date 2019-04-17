@@ -156,4 +156,8 @@ class User < ApplicationRecord
         .order('order_count DESC')
         .limit(limit)
   end
+
+  def discounts_by_type(type)
+    discounts.where("kind = ? ", type)
+  end
 end
