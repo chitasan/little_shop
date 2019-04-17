@@ -173,4 +173,8 @@ class User < ApplicationRecord
   def unfulfilled_orders_revenue
     merchant_pending_orders.sum('order_items.quantity * order_items.price')
   end
+
+  def default_image_items
+    items.where(image: "https://picsum.photos%")
+  end 
 end

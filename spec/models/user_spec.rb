@@ -311,8 +311,18 @@ RSpec.describe User, type: :model do
         oi_1 = create(:order_item, item: item1, order: order, price: 10, quantity: 1)
         oi_2 = create(:order_item, item: item2, order: order, price: 15, quantity: 1)
         oi_3 = create(:fulfilled_order_item, item: item3, order: order)
-        
+
         expect(merchant.unfulfilled_orders_revenue).to eq(25)
+      end 
+
+      it '.default_image_items' do
+        merchant = create(:merchant)
+        merchant2 = create(:merchant)
+        item_1 = Item.create(name: 'av', price: 1.0, description: "thing", inventory: 1, merchant_id: merchant.id)
+
+        item_2 = Item.create(name: 'av', price: 1.0, description: "thing", inventory: 1, merchant_id: merchant2, image: "google.com")
+
+        expect(merchant.default_image_items[0].merchant_id).to eq(merchant.id)
       end 
     end
   end
