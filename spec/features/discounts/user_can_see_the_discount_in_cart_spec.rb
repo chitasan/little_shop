@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'As a user' do
-  it 'can see precentage-based discounts applied in cart' do
+  xit 'can see precentage-based discounts applied in cart' do
     merchant = create(:merchant, discount_type: 0)
     merchant_2 = create(:merchant, discount_type: 0)
 
@@ -25,7 +25,7 @@ RSpec.describe 'As a user' do
     expect(page).to have_content("Total: $95.00")
   end 
 
-  it 'can see dollar-based discounts applied in cart' do
+  xit 'can see dollar-based discounts applied in cart' do
     merchant = create(:merchant, discount_type: 1)
     merchant_2 = create(:merchant, discount_type: 0)
 
@@ -45,7 +45,6 @@ RSpec.describe 'As a user' do
     click_button "Add to Cart"
 
     visit cart_path
-    save_and_open_page
 
     expect(page).to have_content("Total: $95.00")
   end 
