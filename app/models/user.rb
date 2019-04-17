@@ -12,6 +12,7 @@ class User < ApplicationRecord
 
   # as a merchant
   has_many :items, foreign_key: 'merchant_id'
+  has_many :discounts, foreign_key: 'merchant_id'
 
   def active_items
     items.where(active: true).order(:name)
@@ -155,4 +156,25 @@ class User < ApplicationRecord
         .order('order_count DESC')
         .limit(limit)
   end
+
+  def discounts_by_type(type)
+    discounts.where("kind = ? ", type)
+  end
+
+  def merchant_pending_orders
+    Order.joins(order_items: :item)
+      .where("items.merchant_id=? AND orders.status=? AND order_items.fulfilled=?", self.id, 0, false)
+  end 
+
+  def unfulfilled_orders_count
+    merchant_pending_orders.count 
+  end 
+
+  def unfulfilled_orders_revenue
+    merchant_pending_orders.sum('order_items.quantity * order_items.price')
+  end
+
+  def default_image_items
+    items.where(image: "https://picsum.photos%")
+  end 
 end

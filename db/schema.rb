@@ -10,17 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190403231217) do
+ActiveRecord::Schema.define(version: 20190417050038) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "discounts", force: :cascade do |t|
+    t.integer "amount_off", default: 0
+    t.int4range "quantity"
+    t.integer "item_total", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "merchant_id"
+    t.integer "kind", default: 2
+    t.index ["merchant_id"], name: "index_discounts_on_merchant_id"
+  end
 
   create_table "items", force: :cascade do |t|
     t.string "name"
     t.boolean "active", default: false
     t.decimal "price"
     t.text "description"
-    t.string "image"
+    t.string "image", default: "https://picsum.photos%"
     t.integer "inventory"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -60,11 +71,13 @@ ActiveRecord::Schema.define(version: 20190403231217) do
     t.string "zip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "discount_type", default: 2
     t.index ["city"], name: "index_users_on_city"
     t.index ["email"], name: "index_users_on_email"
     t.index ["state"], name: "index_users_on_state"
   end
 
+  add_foreign_key "discounts", "users", column: "merchant_id"
   add_foreign_key "items", "users", column: "merchant_id"
   add_foreign_key "order_items", "items"
   add_foreign_key "order_items", "orders"
