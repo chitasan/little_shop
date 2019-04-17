@@ -160,4 +160,17 @@ class User < ApplicationRecord
   def discounts_by_type(type)
     discounts.where("kind = ? ", type)
   end
+
+  def merchant_pending_orders
+    Order.joins(order_items: :item)
+      .where("items.merchant_id=? AND orders.status=? AND order_items.fulfilled=?", self.id, 0, false)
+  end 
+
+  def unfulfilled_orders_count
+    merchant_pending_orders.count 
+  end 
+
+  def unfulfilled_orders_revenue
+    merchant_pending_orders.sum('order_items.quantity * order_items.price')
+  end
 end
