@@ -45,7 +45,49 @@ RSpec.describe 'As a merchant' do
       within '#to-do' do
         expect(page).to have_content(merchant.unfulfilled_orders_count)
         expect(merchant.unfulfilled_orders_count).to eq(2)
-        expect(page).to have_content(merchant.unfulfilled_orders_revenue) 
+        expect(page).to have_content(merchant.unfulfilled_orders_revenue)
+      end 
+    end
+
+    it 'sees warning when sum of an item in orders exceed item inventory' do
+      merchant = create(:merchant)
+
+      item_1 = create(:item, user: merchant, inventory: 1)
+      item_2 = create(:item, user: merchant, inventory: 5)
+
+      order_1 = create(:order)
+      order_2 = create(:order)
+
+      create(:order_item, order_id: order_1.id, item_id: item_1.id, quantity: 1)
+      create(:order_item, order_id: order_2.id, item_id: item_1.id, quantity: 3)
+
+      login_as(merchant)
+
+      within "#to-do" do
+        expect(page).to have_content("Notice: Your pending orders for #{item_1.name} exceed current inventory.")
+      end 
+    end 
+
+    it 'sees warning a specific order has items that exceed item inventory' do
+      merchant = create(:merchant)
+
+      item_1 = create(:item, user: merchant, inventory: 1)
+      item_2 = create(:item, user: merchant, inventory: 5)
+
+      order_1 = create(:order)
+      order_2 = create(:order)
+
+      create(:order_item, order_id: order_1.id, item_id: item_1.id, quantity: 2)
+      create(:order_item, order_id: order_2.id, item_id: item_1.id, quantity: 3)
+
+      login_as(merchant)
+
+      within "#order-#{order_1.id}" do
+        expect(page).to have_content("Notice: Please restock to fulfill your pending order.")
+      end 
+
+      within "#order-#{order_2.id}" do
+        expect(page).to have_content("Notice: Please restock to fulfill your pending order.")
       end 
     end 
   end 
