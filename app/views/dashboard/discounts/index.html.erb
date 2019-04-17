@@ -1,0 +1,55 @@
+<h1>My Bulk Discounts</h1>
+<% if current_user.discount_type == 2 %>
+  <p>You have no current discounts</p>
+<% elsif current_user.discount_type == 1 %>
+<p>Your discounts are dollar-based off of an item's subtotal</p>
+<p>To switch to percentage-based discounts:
+  <%= button_to 'Switch', dashboard_toggle_discount_path, method: :post %></p>
+<% elsif current_user.discount_type == 0 %>
+<p>Your discounts are based off percentages off of an item's quantities purchased</p>
+<p>To switch to dollar-based discounts:
+   <%= button_to 'Switch', dashboard_toggle_discount_path, method: :post %></p>
+<% end %>
+
+<% if current_user.discount_type == 0%>
+  <table class="discounts-table">
+    <thead>
+      <th>Amount Off</th> 
+      <th>Quantity</th>
+      <th>Update</th>
+      <th>Delete</th>
+    </thead>
+    <tbody class="discounts">
+      <% @discounts.each do |discount| %>
+        <tr id=<%= "discount-#{discount.id}" %>>
+          <td><%= discount.amount_off %></td>
+          <td><%= discount.quantity%></td>
+          <td><%= link_to 'Update', edit_dashboard_discount_path(discount) %></td>
+          <td><%= link_to 'Delete', dashboard_discount_path(discount), method: :delete %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% elsif current_user.discount_type == 1 %>
+  <table class="discounts-table">
+    <thead>
+      <th>Amount Off</th>
+      <th>Item Total</th>
+      <th>Update</th>
+      <th>Delete</th>
+    </thead>
+    <tbody class="discounts">
+      <% @discounts.each do |discount| %>
+        <tr id=<%= "discount-#{discount.id}" %>>
+          <td><%= discount.amount_off %></td>
+          <td><%= discount.item_total %></td>
+          <td><%= link_to 'Update', edit_dashboard_discount_path(discount) %></td>
+          <td><%= link_to 'Delete', dashboard_discount_path(discount), method: :delete %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+<br>
+<br>
+<%= link_to 'Add Discount', new_dashboard_discount_path %>
