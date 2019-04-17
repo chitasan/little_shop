@@ -22,10 +22,10 @@ RSpec.describe 'As a merchant' do
       within "#to-do" do 
         expect(page).to have_link(item_2.name) 
         expect(page).to_not have_link(item_1.name)
-        click_on item_1.name
+        click_link item_2.name
       end 
 
-      expect(current_path).to eq(edit_dashboard_item_path(item_1))
+      expect(current_path).to eq(edit_dashboard_item_path(item_2))
     end 
 
     it 'sees stats for unfulfilled items and revenue impact' do
