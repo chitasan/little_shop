@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190416200634) do
+ActiveRecord::Schema.define(version: 20190416233721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,11 +18,11 @@ ActiveRecord::Schema.define(version: 20190416200634) do
   create_table "discounts", force: :cascade do |t|
     t.integer "amount_off", default: 0
     t.int4range "quantity"
-    t.integer "min_subtotal_required", default: 0
+    t.integer "item_total", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "merchant_id"
-    t.integer "type"
+    t.integer "kind", default: 2
     t.index ["merchant_id"], name: "index_discounts_on_merchant_id"
   end
 
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20190416200634) do
     t.string "zip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "discount_type", default: 2
     t.index ["city"], name: "index_users_on_city"
     t.index ["email"], name: "index_users_on_email"
     t.index ["state"], name: "index_users_on_state"
