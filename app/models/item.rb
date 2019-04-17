@@ -48,8 +48,4 @@ class Item < ApplicationRecord
   def ordered?
     order_items.count > 0
   end
-
-  def best_qualified_discount(quantity)
-    user.discounts.where("discounts.quantity <= ?", quantity)
-  end 
 end

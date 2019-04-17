@@ -32,9 +32,12 @@ class Profile::OrdersController < ApplicationController
 
   def create
     order = Order.create(user: current_user, status: :pending)
-    cart.items.each do |item, quantity|
-      order.order_items.create(item: item, quantity: quantity, price: item.price)
-    end
+    cart.items.each do |item|
+    order.order_items.create(item: item,
+        price: (cart.subtotal(item)/ cart.count_of(item)),
+        quantity: cart.count_of(item),
+        fulfilled: false)
+    end 
     session.delete(:cart)
     flash[:success] = "Your order has been created!"
     redirect_to profile_orders_path

@@ -49,7 +49,7 @@ class Cart
         discount.quantity.include?(count_of(item.id))
       end 
       percent_off = ((100 - applicable_discount.amount_off.to_f)/100)
-      ((original_subtotal) * percent_off) if applicable discount 
+      ((original_subtotal) * percent_off) if applicable_discount 
     elsif merchant.discount_type == 1
       applicable_discount = discounts.find do |discount|
         discount.item_total > count_of(item.id)
