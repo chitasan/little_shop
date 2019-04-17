@@ -184,4 +184,10 @@ class User < ApplicationRecord
       .having('sum(order_items.quantity) > inventory')
       .group(:id)
   end 
+
+  def order_exceeds_inventory_for_item(order_id)
+    Order.pending_orders_for_merchant(self)
+      .joins(:order_items).where('items.inventory < order_items.quantity')
+      .where(order_items: {order_id: order_id}).first
+  end
 end
