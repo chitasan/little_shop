@@ -302,7 +302,7 @@ RSpec.describe User, type: :model do
         expect(merchant.unfulfilled_orders_count).to eq(2)
       end 
 
-      it '.unfulfille_orders_revenue' do
+      it '.unfulfilled_orders_revenue' do
         merchant = create(:merchant)
         order = create(:order, user: merchant)
         item1 = create(:item, user:merchant, price: 10)
@@ -318,11 +318,25 @@ RSpec.describe User, type: :model do
       it '.default_image_items' do
         merchant = create(:merchant)
         merchant2 = create(:merchant)
+
         item_1 = Item.create(name: 'av', price: 1.0, description: "thing", inventory: 1, merchant_id: merchant.id)
 
         item_2 = Item.create(name: 'av', price: 1.0, description: "thing", inventory: 1, merchant_id: merchant2, image: "google.com")
 
         expect(merchant.default_image_items[0].merchant_id).to eq(merchant.id)
+      end 
+
+      it '.low_inventory_items' do
+        merchant = create(:merchant)
+
+        item_1 = create(:item, user: merchant, inventory: 1)
+        item_2 = create(:item, user: merchant, inventory: 5)
+
+        order = create(:order)
+
+        create(:order_item, order_id: order.id, item_id: item_1.id, quantity: 5)
+
+        expect(merchant.low_inventory_items.first).to eq(item_1)
       end 
     end
   end

@@ -175,6 +175,13 @@ class User < ApplicationRecord
   end
 
   def default_image_items
-    items.where(image: "https://picsum.photos%")
+    items.where("image like ?", "https://picsum.photos%")
+  end 
+
+  def low_inventory_items
+    Item.joins(:order_items)
+      .where(order_items: {fulfilled: false})
+      .having('sum(order_items.quantity) > inventory')
+      .group(:id)
   end 
 end
