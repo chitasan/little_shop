@@ -17,7 +17,11 @@
   <h2>To-Dos</h1>
   <ul>
     <li>Items With Placeholder Image that Needs Updating</li>
-     
+      <% if current_merchant? && current_user == @merchant %>
+        <% @default_image_items.each do |item| %>
+          <%= link_to item.name, edit_dashboard_item_path(item)  %>,
+        <% end %>
+      <% end %>
       <br>
     <li><%= "There are #{@unfulfilled_count} unfulfilled orders totalling #{number_to_currency(@unfulfilled_revenue)}" %></li>
   </ul>

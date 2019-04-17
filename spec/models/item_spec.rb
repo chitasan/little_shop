@@ -83,5 +83,21 @@ RSpec.describe Item, type: :model do
         expect(unordered_item.ordered?).to be_falsy
       end
     end
+
+    describe '.best_qualified_discount' do
+      xit 'can return discount amount' do
+        merchant = create(:merchant)
+        item = create(:item)
+
+        discount_1 = create(:discount, amount_off: 10, quantity: 5..99, item_total: 50, merchant_id: merchant.id)
+        item.user.discounts << discount_1
+
+        discount_2 = create(:discount, amount_off: 20, quantity:20..99, item_total: 50, merchant_id: merchant.id)
+        item.user.discounts << discount_2
+
+      expect(item.best_qualified_discount(5)).to eq(discount_1)
+      expect(item.best_qualified_discount(10)).to eq(discount_1)
+      end 
+    end 
   end
 end
