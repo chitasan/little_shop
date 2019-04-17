@@ -275,6 +275,45 @@ RSpec.describe User, type: :model do
         expect(User.top_user_cities_by_order_count(3)[2].city).to eq("Fairfield")
         expect(User.top_user_cities_by_order_count(3)[2].order_count).to eq(1)
       end
+
+      it '.merchant_pending_orders' do
+        merchants = create_list(:merchant, 2)
+        item_1 = create(:item, user: merchants[0])
+        item_2 = create(:item, user: merchants[1])
+        orders = create_list(:order, 3)
+        create(:order_item, order: orders[0], item: item_1, price: 1, quantity: 1)
+        create(:order_item, order: orders[1], item: item_2, price: 1, quantity: 1)
+        create(:order_item, order: orders[2], item: item_1, price: 1, quantity: 1)
+
+        expect(merchants[0].merchant_pending_orders).to eq([orders[0], orders[2]])
+        expect(merchants[1].merchant_pending_orders).to eq([orders[1]])
+      end 
+
+      it '.unfulfilled_orders_count' do 
+        merchant = create(:merchant)
+        order = create(:order)
+        item1 = create(:item, user:merchant)
+        item2 = create(:item, user:merchant)
+        item3 = create(:item, user:merchant)
+        oi_1 = create(:order_item, item: item1, order: order)
+        oi_2 = create(:order_item, item: item2, order: order)
+        oi_3 = create(:fulfilled_order_item, item: item3, order: order)
+
+        expect(merchant.unfulfilled_orders_count).to eq(2)
+      end 
+
+      it '.unfulfille_orders_revenue' do
+        merchant = create(:merchant)
+        order = create(:order, user: merchant)
+        item1 = create(:item, user:merchant, price: 10)
+        item2 = create(:item, user:merchant, price: 15)
+        item3 = create(:item)
+        oi_1 = create(:order_item, item: item1, order: order, price: 10, quantity: 1)
+        oi_2 = create(:order_item, item: item2, order: order, price: 15, quantity: 1)
+        oi_3 = create(:fulfilled_order_item, item: item3, order: order)
+        
+        expect(merchant.unfulfilled_orders_revenue).to eq(25)
+      end 
     end
   end
 end
