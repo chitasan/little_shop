@@ -22,10 +22,17 @@
           <%= link_to item.name, edit_dashboard_item_path(item)  %>,
         <% end %>
       <% end %>
-      <br>
+      <br>  
     <li><%= "There are #{@unfulfilled_count} unfulfilled orders totalling #{number_to_currency(@unfulfilled_revenue)}" %></li>
+    <li> All orders for the following items exceed currrent inventory: 
+      <%if @low_inventory_items %>
+        <% @low_inventory_items.each do |item| %>
+          <%= "Notice: Your pending orders for #{item.name} exceed current inventory." %>
+        <% end %>
+      <% end %>
   </ul>
 </div>
+
 
 <%= tag.div class: "card" do %>
   <%= tag.section class: "statistics card-body float-left m-4" do %>
@@ -104,6 +111,7 @@
         <th>Created Date</th>
         <th>Quantity</th>
         <th>Price</th>
+        <th>Warning</th>
       </tr>
     </thead>
     <tbody>
@@ -118,6 +126,10 @@
           <td><%= order.created_at %></td>
           <td><%= order.total_quantity_for_merchant(@merchant.id) %></td>
           <td><%= order.total_price_for_merchant(@merchant.id) %></td>
+          <td>
+            <% if @merchant.order_exceeds_inventory_for_item(order.id) %>
+              <%= "Notice: Please restock to fulfill your pending order."%><br>
+            <% end %>
         </tr>
       <% end %>
     </tbody>
