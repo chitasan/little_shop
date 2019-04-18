@@ -6,8 +6,6 @@ RSpec.describe 'As a user' do
     merchant_2 = create(:merchant, discount_type: 0)
 
     discount_1 = create(:discount, amount_off: 5, quantity: 1..4, merchant_id: merchant.id, kind: 0)
-    discount_2 = create(:discount, amount_off: 10, quantity: 5..10, merchant_id: merchant.id, kind: 0)
-    discount_3 = create(:discount, amount_off: 15, quantity: 5..10, merchant_id: merchant_2.id, kind: 0)
 
     item_1 = create(:item, merchant_id: merchant.id, price: 100)
     item_2 = create(:item, merchant_id: merchant_2.id)

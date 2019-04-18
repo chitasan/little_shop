@@ -22,6 +22,18 @@ RSpec.describe "Checking out" do
 
   context "as a logged in regular user" do
     before :each do
+      @item_1 = create(:item, user: @merchant_1, inventory: 3)
+      @item_2 = create(:item, user: @merchant_2)
+      @item_3 = create(:item, user: @merchant_2)
+
+      visit item_path(@item_1)
+      click_on "Add to Cart"
+      visit item_path(@item_2)
+      click_on "Add to Cart"
+      visit item_path(@item_3)
+      click_on "Add to Cart"
+      visit item_path(@item_3)
+      click_on "Add to Cart"
       user = create(:user)
       login_as(user)
       visit cart_path
