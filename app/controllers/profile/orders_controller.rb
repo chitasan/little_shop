@@ -33,9 +33,9 @@ class Profile::OrdersController < ApplicationController
   def create
     order = Order.create(user: current_user, status: :pending)
     cart.items.each do |item|
-    order.order_items.create(item: item,
-        price: (cart.subtotal(item)/ cart.count_of(item)),
-        quantity: cart.count_of(item),
+      order.order_items.create(item: item.first,
+        price: (cart.subtotal(item.first)/ cart.count_of(item.first)),
+        quantity: cart.count_of(item.first),
         fulfilled: false)
     end 
     session.delete(:cart)
