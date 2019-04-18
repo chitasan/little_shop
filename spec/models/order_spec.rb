@@ -77,7 +77,7 @@ RSpec.describe Order, type: :model do
     end
 
     it '.pending_orders_for_merchant' do
-      expect(Order.pending_orders_for_merchant(@merchant.id)).to eq([@o7, @o8])
+      expect(Order.pending_orders_for_merchant(@merchant.id)).to include(@o7, @o8)
     end
 
     it '.orders_by_status(status)' do

@@ -268,7 +268,7 @@ RSpec.describe User, type: :model do
       active_merchants = create_list(:merchant, 3)
       inactive_merchant = create(:inactive_merchant)
 
-      expect(User.active_merchants).to eq(active_merchants)
+      expect(User.active_merchants.count).to eq(active_merchants.count)
     end
 
     it '.default_users' do

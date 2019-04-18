@@ -22,6 +22,7 @@ RSpec.describe "Checking out" do
 
   context "as a logged in regular user" do
     before :each do
+      @merchant_1 = create(:merchant)
       @item_1 = create(:item, user: @merchant_1, inventory: 3)
       @item_2 = create(:item, user: @merchant_2)
       @item_3 = create(:item, user: @merchant_2)
@@ -54,8 +55,8 @@ RSpec.describe "Checking out" do
 
     it "should create order items" do
       visit profile_order_path(@new_order)
-
-      within("#oitem-#{@new_order.order_items.first.id}") do
+          
+      within("#oitem-#{@new_order.order_items[3].id}") do
         expect(page).to have_content(@item_1.name)
         expect(page).to have_content(@item_1.description)
         expect(page.find("#item-#{@item_1.id}-image")['src']).to have_content(@item_1.image)
@@ -65,7 +66,7 @@ RSpec.describe "Checking out" do
         expect(page).to have_content("Fulfilled: No")
       end
 
-      within("#oitem-#{@new_order.order_items.second.id}") do
+      within("#oitem-#{@new_order.order_items[4].id}") do
         expect(page).to have_content(@item_2.name)
         expect(page).to have_content(@item_2.description)
         expect(page.find("#item-#{@item_2.id}-image")['src']).to have_content(@item_2.image)
@@ -75,7 +76,7 @@ RSpec.describe "Checking out" do
         expect(page).to have_content("Fulfilled: No")
       end
 
-      within("#oitem-#{@new_order.order_items.third.id}") do
+      within("#oitem-#{@new_order.order_items[5].id}") do
         expect(page).to have_content(@item_3.name)
         expect(page).to have_content(@item_3.description)
         expect(page.find("#item-#{@item_3.id}-image")['src']).to have_content(@item_3.image)

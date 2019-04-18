@@ -4,9 +4,10 @@ RSpec.describe "Cart show page" do
   before :each do
     @merchant_1 = create(:merchant)
     @merchant_2 = create(:merchant)
-    @item_1 = create(:item, user: @merchant_1, inventory: 3)
-    @item_2 = create(:item, user: @merchant_2)
-    @item_3 = create(:item, user: @merchant_2)
+ 
+    @item_1 = create(:item, merchant_id: @merchant_1.id, inventory: 3, price: 100)
+    @item_2 = create(:item, merchant_id: @merchant_2.id)
+    @item_3 = create(:item, merchant_id: @merchant_2.id)
   end
 
   context "a regular user or visitor sees their cart summary" do
@@ -40,6 +41,7 @@ RSpec.describe "Cart show page" do
         expect(page).to have_content(@item_1.user.name)
         expect(page).to have_content(@item_1.price)
         expect(page).to have_content("quantity: 1")
+
         expect(page).to have_content("subtotal: $#{@item_1.price}")
       end
 
